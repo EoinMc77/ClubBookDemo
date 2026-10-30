@@ -1,0 +1,1260 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClubBook | GAA Club Management</title>
+
+<style>
+:root {
+  --green:#176b45;
+  --dark:#123d2b;
+  --light:#edf5ef;
+  --cream:#f7f9f6;
+  --white:#fff;
+  --grey:#e6eae7;
+  --text:#26372e;
+  --muted:#65736a;
+  --orange:#f3bd68;
+  --red:#b83d3d;
+}
+
+* { box-sizing:border-box; }
+
+body {
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--cream);
+  color:var(--text);
+  line-height:1.5;
+}
+
+header {
+  background:var(--dark);
+  color:white;
+  padding:17px 0;
+}
+
+.container {
+  width:min(1100px,94%);
+  margin:auto;
+}
+
+.header-inner {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+
+.logo {
+  font-size:1.55rem;
+  font-weight:800;
+}
+
+.logo span { color:var(--orange); }
+
+.header-small {
+  font-size:.78rem;
+  color:#d9e8dd;
+}
+
+main { padding:24px 0 50px; }
+
+.intro {
+  margin-bottom:20px;
+}
+
+h1 { margin:0 0 5px; font-size:1.8rem; }
+h2 { font-size:1.25rem; margin:0 0 14px; }
+h3 { font-size:1rem; margin:0 0 8px; }
+
+.muted { color:var(--muted); font-size:.9rem; }
+
+.sample-banner {
+  background:#fff2d9;
+  border:1px solid #f0d29a;
+  color:#745018;
+  border-radius:9px;
+  padding:11px 14px;
+  margin:15px 0 22px;
+  font-size:.85rem;
+  font-weight:600;
+}
+
+.tabs {
+  display:flex;
+  gap:8px;
+  margin-bottom:18px;
+  overflow-x:auto;
+}
+
+.tab {
+  border:1px solid #d7dfd9;
+  border-radius:9px;
+  padding:11px 15px;
+  background:white;
+  font-weight:700;
+  color:var(--text);
+  cursor:pointer;
+  white-space:nowrap;
+}
+
+.tab.active {
+  background:var(--green);
+  color:white;
+  border-color:var(--green);
+}
+
+.panel { display:none; }
+.panel.active { display:block; }
+
+.card {
+  background:white;
+  border:1px solid #e1e8e2;
+  border-radius:13px;
+  padding:18px;
+  margin-bottom:17px;
+  box-shadow:0 3px 12px #183c2810;
+}
+
+.section-heading {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin-bottom:12px;
+}
+
+.week-grid {
+  display:grid;
+  grid-template-columns:repeat(7,minmax(100px,1fr));
+  gap:8px;
+  overflow-x:auto;
+  padding-bottom:8px;
+}
+
+.day {
+  min-height:120px;
+  background:#f5f8f5;
+  border:1px solid #e0e8e1;
+  border-radius:9px;
+  padding:9px;
+}
+
+.day.today { border:2px solid var(--green); }
+
+.day-name {
+  font-size:.8rem;
+  font-weight:800;
+}
+
+.day-date {
+  font-size:.75rem;
+  color:var(--muted);
+  margin-bottom:9px;
+}
+
+.day-booking {
+  padding:6px;
+  border-radius:6px;
+  margin-bottom:5px;
+  background:#dcefe2;
+  color:#174d30;
+  font-size:.7rem;
+  line-height:1.35;
+  overflow-wrap:anywhere;
+}
+
+.day-booking.pending {
+  background:#fff0d5;
+  color:#79500c;
+}
+
+.day-booking.rejected {
+  background:#f8e1e1;
+  color:#8b3030;
+}
+
+.booking-list {
+  display:grid;
+  gap:10px;
+}
+
+.booking-item {
+  border:1px solid #e3e9e4;
+  border-radius:10px;
+  padding:13px;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.booking-info { flex:1; min-width:180px; }
+
+.booking-info strong { display:block; }
+
+.booking-info small {
+  display:block;
+  color:var(--muted);
+  margin-top:3px;
+}
+
+.status {
+  display:inline-block;
+  font-size:.72rem;
+  font-weight:800;
+  border-radius:20px;
+  padding:4px 9px;
+}
+
+.approved { background:#dcefe2; color:#176b45; }
+.pending { background:#fff0d5; color:#81560d; }
+.rejected { background:#f8e1e1; color:#9b3030; }
+
+button {
+  font:inherit;
+}
+
+.btn {
+  border:0;
+  background:var(--green);
+  color:white;
+  border-radius:8px;
+  padding:10px 14px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.btn:hover { filter:brightness(.92); }
+
+.btn.secondary {
+  background:#e8eee9;
+  color:var(--dark);
+}
+
+.btn.danger { background:var(--red); }
+
+.btn.small {
+  font-size:.78rem;
+  padding:7px 10px;
+}
+
+.btn:disabled {
+  background:#cbd2cd;
+  color:#7a847d;
+  cursor:not-allowed;
+}
+
+form { display:grid; gap:13px; }
+
+.form-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:13px;
+}
+
+label {
+  display:block;
+  font-size:.85rem;
+  font-weight:700;
+  margin-bottom:5px;
+}
+
+input, select {
+  width:100%;
+  min-height:43px;
+  border:1px solid #cbd6cd;
+  border-radius:8px;
+  padding:9px 10px;
+  background:white;
+  color:var(--text);
+  font:inherit;
+}
+
+input:focus, select:focus {
+  outline:2px solid #8ebca0;
+  border-color:var(--green);
+}
+
+.equipment-list {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+
+.equipment-option {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:10px;
+  background:#f0f5f1;
+  border-radius:8px;
+  font-size:.84rem;
+}
+
+.equipment-option input {
+  width:18px;
+  min-height:18px;
+  accent-color:var(--green);
+}
+
+.equipment-option.unavailable {
+  background:var(--grey);
+  color:#89918b;
+}
+
+.equipment-option small {
+  display:block;
+  color:var(--muted);
+}
+
+.message {
+  padding:11px;
+  border-radius:8px;
+  display:none;
+  font-size:.85rem;
+  font-weight:600;
+}
+
+.message.error {
+  display:block;
+  background:#fbe5e5;
+  color:#922f2f;
+}
+
+.message.success {
+  display:block;
+  background:#dff1e4;
+  color:#176b45;
+}
+
+.inventory-row {
+  display:grid;
+  grid-template-columns:1fr 90px 65px;
+  gap:10px;
+  align-items:center;
+  padding:12px 0;
+  border-bottom:1px solid #e5ebe6;
+}
+
+.inventory-row:last-child { border-bottom:0; }
+
+.inventory-row input {
+  min-height:38px;
+  text-align:center;
+}
+
+.resource-row {
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  padding:10px 0;
+  border-bottom:1px solid #e5ebe6;
+}
+
+footer {
+  background:var(--dark);
+  color:#dce8df;
+  padding:20px 0;
+  text-align:center;
+  font-size:.8rem;
+}
+
+@media(max-width:650px) {
+  .container { width:94%; }
+  .header-small { display:none; }
+  h1 { font-size:1.5rem; }
+  .card { padding:14px; }
+  .form-grid { grid-template-columns:1fr; }
+  .equipment-list { grid-template-columns:1fr; }
+  .week-grid { grid-template-columns:repeat(7,115px); }
+  .inventory-row { grid-template-columns:1fr 65px 55px; }
+  .booking-item { flex-direction:column; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="container header-inner">
+    <div class="logo">🏐 Club<span>Book</span></div>
+    <div class="header-small">GAA Club Booking & Equipment Portal</div>
+  </div>
+</header>
+
+<main class="container">
+
+  <div class="intro">
+    <h1>Club overview</h1>
+    <div class="muted">Manage your club's pitches, facilities and shared equipment.</div>
+  </div>
+
+  <div class="sample-banner">
+    DEMO VERSION — All clubs, teams and bookings shown here are fictional sample data.
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="calendar">📅 Pitch calendar</button>
+    <button class="tab" data-tab="booking">➕ New booking</button>
+    <button class="tab" data-tab="equipment">📦 Equipment</button>
+    <button class="tab" data-tab="admin">⚙️ Admin</button>
+  </div>
+
+  <!-- CALENDAR -->
+  <section id="calendar" class="panel active">
+
+    <div class="card">
+      <div class="section-heading">
+        <div>
+          <h2>Weekly facility calendar</h2>
+          <div class="muted">See what your club has booked this week.</div>
+        </div>
+        <button class="btn secondary small" onclick="renderCalendar()">Refresh</button>
+      </div>
+
+      <div class="week-grid" id="weekGrid"></div>
+      <p class="muted">Green = approved booking. Amber = awaiting approval.</p>
+    </div>
+
+    <div class="card">
+      <h2>Upcoming booking requests</h2>
+      <div class="booking-list" id="calendarBookings"></div>
+    </div>
+
+  </section>
+
+  <!-- NEW BOOKING -->
+  <section id="booking" class="panel">
+
+    <div class="card">
+      <h2 id="formHeading">Request a booking</h2>
+      <p class="muted">
+        Choose your team, facility, date and time. You can also request equipment.
+      </p>
+
+      <form id="bookingForm">
+
+        <div class="form-grid">
+          <div>
+            <label for="team">Team</label>
+            <select id="team" required>
+              <option value="">Select your team</option>
+              <option>U12 Boys Football</option>
+              <option>U14 Girls Football</option>
+              <option>U16 Hurling</option>
+              <option>Minor Boys Hurling</option>
+              <option>Junior B Hurling</option>
+              <option>Senior Men's Football</option>
+              <option>Senior Ladies Football</option>
+              <option>Senior Camogie</option>
+              <option>Adult Social Football</option>
+              <option>Club Committee</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="facility">Facility</label>
+            <select id="facility" required>
+              <option value="">Select a facility</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="date">Date</label>
+            <input type="date" id="date" required>
+          </div>
+
+          <div>
+            <label for="start">Start time</label>
+            <select id="start" required>
+              <option value="">Select start time</option>
+              <option value="09:00">09:00</option>
+              <option value="10:00">10:00</option>
+              <option value="11:00">11:00</option>
+              <option value="12:00">12:00</option>
+              <option value="13:00">13:00</option>
+              <option value="14:00">14:00</option>
+              <option value="15:00">15:00</option>
+              <option value="16:00">16:00</option>
+              <option value="17:00">17:00</option>
+              <option value="18:00">18:00</option>
+              <option value="19:00">19:00</option>
+              <option value="20:00">20:00</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="end">Finish time</label>
+            <select id="end" required>
+              <option value="">Select finish time</option>
+              <option value="10:00">10:00</option>
+              <option value="11:00">11:00</option>
+              <option value="12:00">12:00</option>
+              <option value="13:00">13:00</option>
+              <option value="14:00">14:00</option>
+              <option value="15:00">15:00</option>
+              <option value="16:00">16:00</option>
+              <option value="17:00">17:00</option>
+              <option value="18:00">18:00</option>
+              <option value="19:00">19:00</option>
+              <option value="20:00">20:00</option>
+              <option value="21:00">21:00</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <h3>Request equipment</h3>
+          <p class="muted">Unavailable equipment is greyed out. Select quantities needed.</p>
+          <div class="equipment-list" id="equipmentChoices"></div>
+        </div>
+
+        <div id="formMessage" class="message"></div>
+
+        <div class="form-grid">
+          <button type="submit" class="btn" id="submitButton">Submit booking request</button>
+          <button type="button" class="btn secondary" id="cancelEdit" style="display:none" onclick="resetForm()">Cancel editing</button>
+        </div>
+
+        <p class="muted">
+          New requests are marked Pending until approved by a club administrator.
+        </p>
+
+      </form>
+    </div>
+
+  </section>
+
+  <!-- EQUIPMENT -->
+  <section id="equipment" class="panel">
+
+    <div class="card">
+      <h2>Club equipment register</h2>
+      <p class="muted">
+        Check equipment quantities and see what is available for your training session.
+      </p>
+      <div id="equipmentInventory"></div>
+    </div>
+
+    <div class="card">
+      <h2>Equipment currently allocated</h2>
+      <div id="equipmentAllocations"></div>
+    </div>
+
+  </section>
+
+  <!-- ADMIN -->
+  <section id="admin" class="panel">
+
+    <div class="card">
+      <h2>Administrator booking approvals</h2>
+      <p class="muted">Review requests submitted by coaches and team managers.</p>
+      <div class="booking-list" id="adminBookings"></div>
+    </div>
+
+    <div class="card">
+      <h2>Manage equipment quantities</h2>
+      <p class="muted">Update the amount of equipment owned by the club.</p>
+      <div id="adminInventory"></div>
+      <button class="btn" onclick="saveInventory()">Save equipment quantities</button>
+      <div id="inventoryMessage" class="message"></div>
+    </div>
+
+    <div class="card">
+      <h2>Club facilities</h2>
+      <p class="muted">Sample facilities available for booking.</p>
+      <div id="facilityList"></div>
+    </div>
+
+    <div class="card">
+      <h2>Demo controls</h2>
+      <p class="muted">
+        Reset all changes and restore the original fictional sample data.
+      </p>
+      <button class="btn danger" onclick="resetDemo()">Reset demo data</button>
+    </div>
+
+  </section>
+
+</main>
+
+<footer>
+  ClubBook — A fictional GAA club management concept.
+  All records are made-up sample data.
+</footer>
+
+<script>
+/* --------------------------------
+   CLUBBOOK DEMO DATA
+--------------------------------- */
+
+const STORAGE_KEY = "clubbook_demo_v1";
+
+const facilities = [
+  "Main Pitch",
+  "Second Pitch",
+  "Training Field",
+  "Sports Hall",
+  "Club Gym",
+  "Meeting Room"
+];
+
+const equipmentDefaults = [
+  {id:"football",name:"Size 5 footballs",total:10},
+  {id:"sliotar",name:"Sliotars",total:15},
+  {id:"cones",name:"Cones",total:10},
+  {id:"juvenile",name:"Juvenile goalposts",total:2},
+  {id:"adult",name:"Adult goalposts",total:2},
+  {id:"bibs",name:"Training bib sets",total:8},
+  {id:"helmets",name:"Spare helmets",total:12},
+  {id:"hurdles",name:"Training hurdles",total:6}
+];
+
+let state;
+let editingId = null;
+
+function dateOffset(days) {
+  const d = new Date();
+  d.setDate(d.getDate() + days);
+  return localDate(d);
+}
+
+function localDate(d) {
+  const y=d.getFullYear();
+  const m=String(d.getMonth()+1).padStart(2,"0");
+  const day=String(d.getDate()).padStart(2,"0");
+  return `${y}-${m}-${day}`;
+}
+
+function makeSampleData() {
+  const sampleBookings = [
+    {id:1,team:"U12 Boys Football",facility:"Main Pitch",date:dateOffset(0),start:"17:00",end:"18:00",status:"Approved",equipment:{football:2,cones:1,bibs:1}},
+    {id:2,team:"U14 Girls Football",facility:"Second Pitch",date:dateOffset(0),start:"18:00",end:"19:00",status:"Approved",equipment:{football:2,cones:1}},
+    {id:3,team:"U16 Hurling",facility:"Training Field",date:dateOffset(1),start:"18:00",end:"19:00",status:"Pending",equipment:{sliotar:3,helmets:4}},
+    {id:4,team:"Junior B Hurling",facility:"Main Pitch",date:dateOffset(1),start:"19:00",end:"20:00",status:"Approved",equipment:{sliotar:4,cones:2}},
+    {id:5,team:"Senior Men's Football",facility:"Second Pitch",date:dateOffset(2),start:"19:00",end:"20:00",status:"Approved",equipment:{football:3,bibs:2}},
+    {id:6,team:"Senior Ladies Football",facility:"Main Pitch",date:dateOffset(2),start:"18:00",end:"19:00",status:"Pending",equipment:{football:2,cones:2}},
+    {id:7,team:"Senior Camogie",facility:"Training Field",date:dateOffset(3),start:"18:00",end:"19:00",status:"Approved",equipment:{sliotar:4,helmets:5}},
+    {id:8,team:"Minor Boys Hurling",facility:"Main Pitch",date:dateOffset(4),start:"17:00",end:"18:00",status:"Approved",equipment:{sliotar:3,helmets:4}},
+    {id:9,team:"Adult Social Football",facility:"Sports Hall",date:dateOffset(5),start:"10:00",end:"11:00",status:"Approved",equipment:{football:2,cones:1}},
+    {id:10,team:"Club Committee",facility:"Meeting Room",date:dateOffset(6),start:"19:00",end:"20:00",status:"Pending",equipment:{}}
+  ];
+
+  return {
+    bookings:sampleBookings,
+    equipment:equipmentDefaults.map(e=>({...e})),
+    nextId:11
+  };
+}
+
+function loadState() {
+  try {
+    const saved=localStorage.getItem(STORAGE_KEY);
+    if(saved) {
+      const parsed=JSON.parse(saved);
+      if(parsed.bookings && parsed.equipment) return parsed;
+    }
+  } catch(e) {}
+
+  return makeSampleData();
+}
+
+function saveState() {
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
+}
+
+state=loadState();
+
+/* --------------------------------
+   NAVIGATION
+--------------------------------- */
+
+document.querySelectorAll(".tab").forEach(button=>{
+  button.addEventListener("click",()=>{
+    document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));
+    document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+
+    button.classList.add("active");
+    document.getElementById(button.dataset.tab).classList.add("active");
+
+    renderAll();
+  });
+});
+
+function showTab(name) {
+  document.querySelectorAll(".tab").forEach(b=>{
+    b.classList.toggle("active",b.dataset.tab===name);
+  });
+  document.querySelectorAll(".panel").forEach(p=>{
+    p.classList.toggle("active",p.id===name);
+  });
+  renderAll();
+}
+
+/* --------------------------------
+   BOOKING RULES
+--------------------------------- */
+
+function isActive(b) {
+  return b.status==="Approved" || b.status==="Pending";
+}
+
+function overlaps(start1,end1,start2,end2) {
+  return start1 < end2 && start2 < end1;
+}
+
+function facilityConflict(facility,date,start,end,excludeId=null) {
+  return state.bookings.some(b=>
+    b.id!==excludeId &&
+    isActive(b) &&
+    b.facility===facility &&
+    b.date===date &&
+    overlaps(start,end,b.start,b.end)
+  );
+}
+
+function equipmentUsed(id,date,start,end,excludeId=null) {
+  return state.bookings
+    .filter(b=>
+      b.id!==excludeId &&
+      isActive(b) &&
+      b.date===date &&
+      overlaps(start,end,b.start,b.end)
+    )
+    .reduce((total,b)=>total+(b.equipment?.[id]||0),0);
+}
+
+function availableEquipment(id,date,start,end,excludeId=null) {
+  const item=state.equipment.find(e=>e.id===id);
+  if(!item) return 0;
+  return Math.max(0,item.total-equipmentUsed(id,date,start,end,excludeId));
+}
+
+/* --------------------------------
+   BOOKING FORM
+--------------------------------- */
+
+const facilitySelect=document.getElementById("facility");
+const dateInput=document.getElementById("date");
+const startInput=document.getElementById("start");
+const endInput=document.getElementById("end");
+
+facilities.forEach(f=>{
+  const option=document.createElement("option");
+  option.value=f;
+  option.textContent=f;
+  facilitySelect.appendChild(option);
+});
+
+dateInput.min=localDate(new Date());
+dateInput.value=dateOffset(1);
+
+[dateInput,startInput,endInput].forEach(el=>{
+  el.addEventListener("change",renderEquipmentChoices);
+});
+
+facilitySelect.addEventListener("change",renderEquipmentChoices);
+
+function renderEquipmentChoices() {
+  const container=document.getElementById("equipmentChoices");
+  const date=dateInput.value;
+  const start=startInput.value;
+  const end=endInput.value;
+
+  container.innerHTML="";
+
+  state.equipment.forEach(item=>{
+    const available=(date && start && end && end>start)
+      ?availableEquipment(item.id,date,start,end,editingId)
+      :item.total;
+
+    const current=editingId
+      ?(state.bookings.find(b=>b.id===editingId)?.equipment?.[item.id]||0)
+      :0;
+
+    const maximum=Math.min(item.total,available+current);
+    const unavailable=maximum===0;
+
+    const label=document.createElement("label");
+    label.className="equipment-option"+(unavailable?" unavailable":"");
+
+    const checkbox=document.createElement("input");
+    checkbox.type="checkbox";
+    checkbox.value=item.id;
+    checkbox.checked=current>0;
+    checkbox.disabled=unavailable;
+
+    const text=document.createElement("span");
+    text.innerHTML=`${escapeHTML(item.name)}<small>${unavailable?"Unavailable":maximum+" available"}</small>`;
+
+    const quantity=document.createElement("input");
+    quantity.type="number";
+    quantity.min="1";
+    quantity.max=maximum;
+    quantity.value=current>0?current:1;
+    quantity.style.width="55px";
+    quantity.style.minHeight="32px";
+    quantity.disabled=unavailable || !checkbox.checked;
+    quantity.setAttribute("aria-label",item.name+" quantity");
+
+    checkbox.addEventListener("change",()=>{
+      quantity.disabled=!checkbox.checked;
+    });
+
+    quantity.addEventListener("change",()=>{
+      const value=parseInt(quantity.value,10);
+      if(!Number.isFinite(value)||value<1) quantity.value=1;
+      if(value>maximum) quantity.value=maximum;
+    });
+
+    label.append(checkbox,text,quantity);
+    container.appendChild(label);
+  });
+}
+
+function getSelectedEquipment() {
+  const selected={};
+
+  document.querySelectorAll("#equipmentChoices .equipment-option").forEach(label=>{
+    const checkbox=label.querySelector('input[type="checkbox"]');
+    const quantity=label.querySelector('input[type="number"]');
+
+    if(checkbox.checked && !checkbox.disabled) {
+      selected[checkbox.value]=parseInt(quantity.value,10)||1;
+    }
+  });
+
+  return selected;
+}
+
+function resetForm() {
+  editingId=null;
+  document.getElementById("bookingForm").reset();
+  document.getElementById("formHeading").textContent="Request a booking";
+  document.getElementById("submitButton").textContent="Submit booking request";
+  document.getElementById("cancelEdit").style.display="none";
+  document.getElementById("formMessage").className="message";
+  dateInput.min=localDate(new Date());
+  dateInput.value=dateOffset(1);
+  renderEquipmentChoices();
+}
+
+document.getElementById("bookingForm").addEventListener("submit",event=>{
+  event.preventDefault();
+
+  const team=document.getElementById("team").value;
+  const facility=facilitySelect.value;
+  const date=dateInput.value;
+  const start=startInput.value;
+  const end=endInput.value;
+  const message=document.getElementById("formMessage");
+
+  function error(text) {
+    message.className="message error";
+    message.textContent=text;
+  }
+
+  if(!team||!facility||!date||!start||!end) {
+    error("Please complete all booking details.");
+    return;
+  }
+
+  if(date<localDate(new Date())) {
+    error("Please select today or a future date.");
+    return;
+  }
+
+  if(end<=start) {
+    error("The finish time must be after the start time.");
+    return;
+  }
+
+  if(facilityConflict(facility,date,start,end,editingId)) {
+    error("This facility already has a booking during that time. Please choose another time or facility.");
+    return;
+  }
+
+  const equipment=getSelectedEquipment();
+
+  for(const [id,quantity] of Object.entries(equipment)) {
+    if(quantity>availableEquipment(id,date,start,end,editingId)) {
+      const item=state.equipment.find(e=>e.id===id);
+      error("Not enough "+item.name+" available for that timeslot.");
+      return;
+    }
+  }
+
+  if(editingId) {
+    const booking=state.bookings.find(b=>b.id===editingId);
+    booking.team=team;
+    booking.facility=facility;
+    booking.date=date;
+    booking.start=start;
+    booking.end=end;
+    booking.equipment=equipment;
+    booking.status="Pending";
+    message.className="message success";
+    message.textContent="Booking updated and sent for administrator approval.";
+  } else {
+    state.bookings.push({
+      id:state.nextId++,
+      team,facility,date,start,end,
+      status:"Pending",
+      equipment
+    });
+
+    message.className="message success";
+    message.textContent="Your booking request has been submitted!";
+  }
+
+  saveState();
+  resetForm();
+  showTab("calendar");
+});
+
+function editBooking(id) {
+  const b=state.bookings.find(x=>x.id===id);
+  if(!b) return;
+
+  editingId=id;
+  showTab("booking");
+
+  document.getElementById("formHeading").textContent="Edit booking";
+  document.getElementById("submitButton").textContent="Save changes";
+  document.getElementById("cancelEdit").style.display="block";
+
+  document.getElementById("team").value=b.team;
+  facilitySelect.value=b.facility;
+  dateInput.value=b.date;
+  startInput.value=b.start;
+  endInput.value=b.end;
+
+  renderEquipmentChoices();
+}
+
+/* --------------------------------
+   CALENDAR
+--------------------------------- */
+
+function renderCalendar() {
+  const grid=document.getElementById("weekGrid");
+  grid.innerHTML="";
+
+  const today=new Date();
+  const day=today.getDay();
+  const monday=new Date(today);
+  monday.setDate(today.getDate()+(day===0?-6:1-day));
+
+  const days=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+
+  for(let i=0;i<7;i++) {
+    const d=new Date(monday);
+    d.setDate(monday.getDate()+i);
+    const date=localDate(d);
+
+    const cell=document.createElement("div");
+    cell.className="day"+(date===localDate(today)?" today":"");
+
+    cell.innerHTML=`
+      <div class="day-name">${days[i]}</div>
+      <div class="day-date">${d.getDate()}/${d.getMonth()+1}</div>
+    `;
+
+    state.bookings
+      .filter(b=>b.date===date && isActive(b))
+      .sort((a,b)=>a.start.localeCompare(b.start))
+      .forEach(b=>{
+        const item=document.createElement("div");
+        item.className="day-booking"+(b.status==="Pending"?" pending":"");
+        item.textContent=`${b.start} ${b.team} — ${b.facility}`;
+        cell.appendChild(item);
+      });
+
+    grid.appendChild(cell);
+  }
+
+  const upcoming=state.bookings
+    .filter(b=>isActive(b))
+    .sort((a,b)=>(a.date+a.start).localeCompare(b.date+b.start));
+
+  const list=document.getElementById("calendarBookings");
+  list.innerHTML="";
+
+  if(!upcoming.length) {
+    list.innerHTML='<p class="muted">No current bookings.</p>';
+    return;
+  }
+
+  upcoming.forEach(b=>list.appendChild(createBookingCard(b,false)));
+}
+
+/* --------------------------------
+   BOOKING CARDS AND ADMIN
+--------------------------------- */
+
+function createBookingCard(b,admin) {
+  const card=document.createElement("div");
+  card.className="booking-item";
+
+  const equipmentText=Object.entries(b.equipment||{})
+    .map(([id,q])=>{
+      const item=state.equipment.find(e=>e.id===id);
+      return item?`${q} × ${item.name}`:"";
+    })
+    .filter(Boolean)
+    .join(", ");
+
+  const info=document.createElement("div");
+  info.className="booking-info";
+
+  const date=new Date(b.date+"T12:00:00");
+  const dateText=date.toLocaleDateString("en-IE",{
+    weekday:"short",day:"numeric",month:"short",year:"numeric"
+  });
+
+  info.innerHTML=`
+    <strong>${escapeHTML(b.team)}</strong>
+    <small>${escapeHTML(b.facility)} · ${dateText}</small>
+    <small>${b.start} – ${b.end}</small>
+    <small>Equipment: ${escapeHTML(equipmentText||"None requested")}</small>
+  `;
+
+  const right=document.createElement("div");
+  const status=document.createElement("span");
+  status.className="status "+b.status.toLowerCase();
+  status.textContent=b.status;
+  right.appendChild(status);
+
+  const actions=document.createElement("div");
+  actions.style.display="flex";
+  actions.style.flexWrap="wrap";
+  actions.style.gap="6px";
+  actions.style.marginTop="9px";
+
+  if(admin && b.status==="Pending") {
+    const approve=document.createElement("button");
+    approve.className="btn small";
+    approve.textContent="Approve";
+    approve.onclick=()=>changeStatus(b.id,"Approved");
+
+    const reject=document.createElement("button");
+    reject.className="btn small danger";
+    reject.textContent="Reject";
+    reject.onclick=()=>changeStatus(b.id,"Rejected");
+
+    actions.append(approve,reject);
+  }
+
+  if(admin && b.status!=="Rejected") {
+    const edit=document.createElement("button");
+    edit.className="btn small secondary";
+    edit.textContent="Edit";
+    edit.onclick=()=>editBooking(b.id);
+    actions.appendChild(edit);
+  }
+
+  if(admin && b.status==="Rejected") {
+    const remove=document.createElement("button");
+    remove.className="btn small danger";
+    remove.textContent="Remove";
+    remove.onclick=()=>deleteBooking(b.id);
+    actions.appendChild(remove);
+  }
+
+  right.appendChild(actions);
+  card.append(info,right);
+
+  return card;
+}
+
+function changeStatus(id,status) {
+  const b=state.bookings.find(x=>x.id===id);
+  if(!b) return;
+
+  if(status==="Approved") {
+    if(facilityConflict(b.facility,b.date,b.start,b.end,id)) {
+      alert("This facility now conflicts with another booking. Edit the request before approving it.");
+      return;
+    }
+
+    for(const [equipmentId,quantity] of Object.entries(b.equipment||{})) {
+      if(quantity>availableEquipment(equipmentId,b.date,b.start,b.end,id)) {
+        alert("There is not enough equipment available to approve this booking.");
+        return;
+      }
+    }
+  }
+
+  b.status=status;
+  saveState();
+  renderAll();
+}
+
+function deleteBooking(id) {
+  if(!confirm("Remove this booking from the demo?")) return;
+  state.bookings=state.bookings.filter(b=>b.id!==id);
+  saveState();
+  renderAll();
+}
+
+function renderAdmin() {
+  const list=document.getElementById("adminBookings");
+  list.innerHTML="";
+
+  const sorted=[...state.bookings].sort((a,b)=>
+    (a.date+a.start).localeCompare(b.date+b.start)
+  );
+
+  if(!sorted.length) {
+    list.innerHTML='<p class="muted">No bookings found.</p>';
+  }
+
+  sorted.forEach(b=>list.appendChild(createBookingCard(b,true)));
+
+  const inventory=document.getElementById("adminInventory");
+  inventory.innerHTML="";
+
+  state.equipment.forEach(item=>{
+    const row=document.createElement("div");
+    row.className="inventory-row";
+    row.innerHTML=`
+      <div><strong>${escapeHTML(item.name)}</strong></div>
+      <input type="number" min="0" max="999" value="${item.total}" data-stock="${item.id}" aria-label="${escapeHTML(item.name)} total quantity">
+      <span class="muted">Total</span>
+    `;
+    inventory.appendChild(row);
+  });
+
+  const facilitiesContainer=document.getElementById("facilityList");
+  facilitiesContainer.innerHTML="";
+
+  facilities.forEach(f=>{
+    const row=document.createElement("div");
+    row.className="resource-row";
+    row.innerHTML=`<strong>${escapeHTML(f)}</strong><span class="muted">Bookable facility</span>`;
+    facilitiesContainer.appendChild(row);
+  });
+}
+
+function saveInventory() {
+  document.querySelectorAll("[data-stock]").forEach(input=>{
+    const item=state.equipment.find(e=>e.id===input.dataset.stock);
+    const value=parseInt(input.value,10);
+    if(item && Number.isInteger(value) && value>=0) {
+      item.total=value;
+    }
+  });
+
+  saveState();
+  renderAll();
+
+  const message=document.getElementById("inventoryMessage");
+  message.className="message success";
+  message.textContent="Equipment quantities saved successfully.";
+}
+
+/* --------------------------------
+   EQUIPMENT REGISTER
+--------------------------------- */
+
+function renderEquipment() {
+  const inventory=document.getElementById("equipmentInventory");
+  inventory.innerHTML="";
+
+  state.equipment.forEach(item=>{
+    const allocated=state.bookings
+      .filter(b=>isActive(b))
+      .reduce((sum,b)=>sum+(b.equipment?.[item.id]||0),0);
+
+    const available=Math.max(0,item.total-allocated);
+
+    const row=document.createElement("div");
+    row.className="inventory-row";
+    row.innerHTML=`
+      <div>
+        <strong>${escapeHTML(item.name)}</strong>
+        <div class="muted">${available} available · ${allocated} allocated</div>
+      </div>
+      <strong>${item.total}</strong>
+      <span class="muted">Total</span>
+    `;
+    inventory.appendChild(row);
+  });
+
+  const allocations=document.getElementById("equipmentAllocations");
+  allocations.innerHTML="";
+
+  const bookings=state.bookings.filter(b=>
+    isActive(b) && Object.keys(b.equipment||{}).length>0
+  );
+
+  if(!bookings.length) {
+    allocations.innerHTML='<p class="muted">No equipment allocated.</p>';
+    return;
+  }
+
+  bookings.forEach(b=>{
+    const row=document.createElement("div");
+    row.className="resource-row";
+
+    const detail=Object.entries(b.equipment).map(([id,q])=>{
+      const item=state.equipment.find(e=>e.id===id);
+      return item?`${q} × ${item.name}`:"";
+    }).filter(Boolean).join(", ");
+
+    row.innerHTML=`
+      <div>
+        <strong>${escapeHTML(b.team)}</strong>
+        <div class="muted">${escapeHTML(b.facility)} · ${escapeHTML(detail)}</div>
+      </div>
+      <span class="status ${b.status.toLowerCase()}">${b.status}</span>
+    `;
+
+    allocations.appendChild(row);
+  });
+}
+
+/* --------------------------------
+   HELPERS AND RESET
+--------------------------------- */
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g,char=>({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  })[char]);
+}
+
+function renderAll() {
+  renderCalendar();
+  renderEquipment();
+  renderAdmin();
+  renderEquipmentChoices();
+}
+
+function resetDemo() {
+  if(!confirm("This will erase your demo changes and restore the sample data. Continue?")) return;
+
+  state=makeSampleData();
+  saveState();
+  resetForm();
+  renderAll();
+  showTab("calendar");
+}
+
+/* INITIAL DISPLAY */
+
+saveState();
+renderAll();
+
+</script>
+</body>
+</html>
